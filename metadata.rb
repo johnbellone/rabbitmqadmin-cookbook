@@ -1,0 +1,10 @@
+name 'rabbitmqadmin'
+maintainer 'John Bellone'
+maintainer_email 'jbellone@bloomberg.net'
+license 'All rights reserved'
+description 'Installs the rabbitmqadmin tool.'
+long_description 'Installs the rabbitmqadmin tool and provides a set of LWRPs for managing queues and exchanges.'
+version '0.1.0'
+
+suggests 'rabbitmq'
+suggests 'rabbitmq-cluster'
