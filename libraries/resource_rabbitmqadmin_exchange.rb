@@ -5,4 +5,5 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource::Rabbitmqadmin
 
   attribute :exchange_name, kind_of: String, name_attribute: true, required: true
   attribute :exchange_type, kind_of: String, default: 'topic', required: true, regex: /^(topic|direct)$/
+  attribute :exchange_options, kind_of: Hash, default: {}, required: true
 end

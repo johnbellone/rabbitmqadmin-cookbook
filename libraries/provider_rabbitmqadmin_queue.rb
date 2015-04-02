@@ -1,29 +1,28 @@
-require 'chef/provider/lwrp_base'
-require 'forwardable'
+require_relative 'provider_rabbitmqadmin'
 
-class Chef::Provider::Rabbitmqadmin < Chef::Provider::LWRPBase
+class Chef::Provider::RabbitmqadminQueue < Chef::Provider::Rabbitmqadmin
   extend Forwardable
-  def_delegators :@new_resource, :sensitive
+  def_delegators :@new_resource, :queue_name, :queue_options
+  provides :rabbitmqadmin_queue
 
-  use_inline_resources if defined?(use_inline_resources)
-  provides :rabbitmqadmin
-
-  def whyrun_enabled?
-    true
+  def command_type
+    case @new_resource.action
+    when :create
+      return 'declare queue'
+    when :delete
+      return 'delete queue'
+    end
   end
 
   def command
     opts = [
-      "-u '#{new_resource.username}'",
-      "-p '#{new_resource.password}'"
+      "--name='#{queue_name}'"
     ]
-    opts << "-V '#{new_resource.vhost}'" if new_resource.vhost
-    opts << "-H '#{new_resource.hostname}'" if new_resource.hostname
-    opts << "-P #{new_resource.port}" if new_resource.port
-    opts << "-s" if new_resource.ssl
-    opts << "--ssl-key-file '#{new_resource.ssl_key_file}'"
-    opts << "--ssl-cert-file '#{new_resource.ssl_cert_file}'"
 
-    [ 'rabbitmqadmin', opts ].flatten.join(' ')
+    # TODO: (jbellone) Figure out best way to parse options here.
+
+    # The parent class will build command-line options for login and
+    # all that fancy jazz. Simply care about the specifics.
+    [ super, command_type, opts ].flatten.join(' ')
   end
 end
