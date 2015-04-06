@@ -28,11 +28,11 @@ class Chef::Provider::RabbitmqadminQueue < Chef::Provider::LWRPBase
 
   def run_command(*args)
     opts = [
-      "--name='#{exchange_name}'",
+      "name='#{exchange_name}'",
     ]
 
     new_resource.exchange_options.each_pair do |key, value|
-      opts << "--#{key}='#{value}'"
+      opts << "#{key}='#{value}'"
     end
 
     [ rabbitmqadmin_command, args, opts ].flatten.join(' ')
