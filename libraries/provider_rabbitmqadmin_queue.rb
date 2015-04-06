@@ -19,7 +19,9 @@ class Chef::Provider::RabbitmqadminQueue < Chef::Provider::Rabbitmqadmin
       "--name='#{queue_name}'"
     ]
 
-    # TODO: (jbellone) Figure out best way to parse options here.
+    @new_resource.queue_options.each_pair do |key, value|
+      opts << "--#{key}='#{value}'"
+    end
 
     # The parent class will build command-line options for login and
     # all that fancy jazz. Simply care about the specifics.

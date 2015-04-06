@@ -21,7 +21,9 @@ class Chef::Provider::RabbitmqadminExchange < Chef::Provider::Rabbitmqadmin
       "--type='#{exchange_type}'"
     ]
 
-    # TODO: (jbellone) Figure out best way to parse options here.
+    @new_resource.exchange_options.each_pair do |key, value|
+      opts << "--#{key}='#{value}'"
+    end
 
     # The parent class will build command-line options for login and
     # all that fancy jazz. Simply care about the specifics.
