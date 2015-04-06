@@ -4,32 +4,38 @@ require 'forwardable'
 class Chef::Provider::RabbitmqadminExchange < Chef::Provider::LWRPBase
   include RabbitmqadminCookbook::Helpers
   extend Forwardable
-
-  use_inline_resources if defined?(use_inline_resources)
   def_delegators :@new_resource, :exchange_name, :exchange_type, :exchange_options
   provides :rabbitmqadmin_exchange
 
-  def command_type
-    case @new_resource.action
-    when :create
-      return 'declare exchange'
-    when :delete
-      return 'delete exchange'
+  use_inline_resources if defined?(use_inline_resources)
+  def whyrun_supported?
+    true
+  end
+
+  action :create do
+    execute "rabbitmqadmin_exchange[#{new_resource.name}] :create" do
+      command run_command('declare exchange')
+      environment('PATH' => '/usr/local/bin:/usr/bin')
     end
   end
 
-  def command
+  action :delete do
+    execute "rabbitmqadmin_exchange[#{new_resource.name}] :create" do
+      command run_command('delete exchange')
+      environment('PATH' => '/usr/local/bin:/usr/bin')
+    end
+  end
+
+  def run_command(*args)
     opts = [
       "--name='#{exchange_name}'",
       "--type='#{exchange_type}'"
     ]
 
-    @new_resource.exchange_options.each_pair do |key, value|
+    new_resource.exchange_options.each_pair do |key, value|
       opts << "--#{key}='#{value}'"
     end
 
-    # The parent class will build command-line options for login and
-    # all that fancy jazz. Simply care about the specifics.
-    [ build_command, command_type, opts ].flatten.join(' ')
+    [ rabbitmqadmin_command, args, opts ].flatten.join(' ')
   end
 end

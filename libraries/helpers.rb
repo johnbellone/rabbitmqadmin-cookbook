@@ -1,6 +1,6 @@
 module RabbitmqadminCookbook
   module Helpers
-    def build_command
+    def rabbitmqadmin_command
       opts = [
         "-u '#{new_resource.username}'",
         "-p '#{new_resource.password}'"
