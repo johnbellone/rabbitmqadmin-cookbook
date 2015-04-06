@@ -14,15 +14,19 @@ class Chef::Provider::RabbitmqadminExchange < Chef::Provider::LWRPBase
 
   action :create do
     execute "rabbitmqadmin_exchange[#{new_resource.name}] :create" do
+      sensitive true
       command run_command('declare exchange')
       environment('PATH' => '/usr/local/bin:/usr/bin')
+      not_if "#{rabbitmqadmin_command} -f tsv list exchanges |awk '$1 ~ /^#{exchange_name}$/'"
     end
   end
 
   action :delete do
     execute "rabbitmqadmin_exchange[#{new_resource.name}] :create" do
+      sensitive true
       command run_command('delete exchange')
       environment('PATH' => '/usr/local/bin:/usr/bin')
+      only_if "#{rabbitmqadmin_command} -f tsv list exchanges |awk '$1 ~ /^#{exchange_name}$/'"
     end
   end
 

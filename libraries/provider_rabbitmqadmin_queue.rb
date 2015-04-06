@@ -14,24 +14,28 @@ class Chef::Provider::RabbitmqadminQueue < Chef::Provider::LWRPBase
 
   action :create do
     execute "rabbitmqadmin_queue[#{new_resource.name}] :create" do
+      sensitive true
       command run_command('declare queue')
       environment('PATH' => '/usr/local/bin:/usr/bin')
+      not_if "#{rabbitmqadmin_command} -f tsv list queues |awk '$1 ~ /^#{queue_name}$/'"
     end
   end
 
   action :delete do
     execute "rabbitmqadmin_queue[#{new_resource.name}] :create" do
+      sensitive true
       command run_command('delete queue')
       environment('PATH' => '/usr/local/bin:/usr/bin')
+      only_if "#{rabbitmqadmin_command} -f tsv list queues |awk '$1 ~ /^#{queue_name}$/'"
     end
   end
 
   def run_command(*args)
     opts = [
-      "name='#{exchange_name}'",
+      "name='#{queue_name}'",
     ]
 
-    new_resource.exchange_options.each_pair do |key, value|
+    new_resource.queue_options.each_pair do |key, value|
       opts << "#{key}='#{value}'"
     end
 
