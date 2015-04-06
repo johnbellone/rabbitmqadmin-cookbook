@@ -1,7 +1,11 @@
-require_relative 'provider_rabbitmqadmin'
+require_relative 'helpers'
+require 'forwardable'
 
-class Chef::Provider::RabbitmqadminQueue < Chef::Provider::Rabbitmqadmin
+class Chef::Provider::RabbitmqadminQueue < Chef::Provider::LWRPBase
+  include RabbitmqadminCookbook::Helpers
   extend Forwardable
+
+  use_inline_resources if defined?(use_inline_resources)
   def_delegators :@new_resource, :queue_name, :queue_options
   provides :rabbitmqadmin_queue
 
@@ -25,6 +29,6 @@ class Chef::Provider::RabbitmqadminQueue < Chef::Provider::Rabbitmqadmin
 
     # The parent class will build command-line options for login and
     # all that fancy jazz. Simply care about the specifics.
-    [ super, command_type, opts ].flatten.join(' ')
+    [ build_command, command_type, opts ].flatten.join(' ')
   end
 end
