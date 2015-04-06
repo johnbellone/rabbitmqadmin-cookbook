@@ -6,7 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe 'python::default'
+include_recipe 'python::install_package'
 
 directory node['rabbitmqadmin']['install_path'] do
   recursive true
@@ -14,7 +14,7 @@ directory node['rabbitmqadmin']['install_path'] do
 end
 
 # Because someone decided to be funny and not use periods in the URL.
-friendly_version = node['rabbitmqadmin']['source_version'].gsub(/\./, /_/)
+friendly_version = node['rabbitmqadmin']['source_version'].gsub(/\./, '_')
 script = remote_file File.join(node['rabbitmqadmin']['install_path'], 'rabbitmqadmin') do
   source node['rabbitmqadmin']['source_url'] % { version: friendly_version }
   checksum node['rabbitmqadmin']['source_checksum']
