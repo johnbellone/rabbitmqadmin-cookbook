@@ -1,11 +1,10 @@
 #
-# Cookbook Name:: rabbitmqadmin
-# Attribute:: default
+# Cookbook: rabbitmqadmin
+# License: Apache 2.0
 #
-# Copyright (C) 2015 Bloomberg Finance L.P.
+# Copyright 2015 Bloomberg Finance L.P.
 #
-# All rights reserved - Do Not Redistribute
-#
+
 default['rabbitmqadmin']['install_path'] = '/usr/local/bin'
 default['rabbitmqadmin']['source_version'] = '3.5.0'
 default['rabbitmqadmin']['source_url'] = "https://raw.githubusercontent.com/rabbitmq/rabbitmq-management/rabbitmq_v%{version}/bin/rabbitmqadmin"

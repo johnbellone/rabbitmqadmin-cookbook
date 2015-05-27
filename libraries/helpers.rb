@@ -1,21 +1,28 @@
+#
+# Cookbook: rabbitmqadmin
+# License: Apache 2.0
+#
+# Copyright 2015 Bloomberg Finance L.P.
+#
+
 module RabbitmqadminCookbook
   module Helpers
     def rabbitmqadmin_command
       opts = [
-        "-u '#{new_resource.username}'",
-        "-p '#{new_resource.password}'"
+        "-u '#{username}'",
+        "-p '#{password}'"
       ]
-      opts << "-V '#{new_resource.vhost}'" if new_resource.vhost
-      opts << "-H '#{new_resource.hostname}'" if new_resource.hostname
-      opts << "-P #{new_resource.port}" if new_resource.port
+      opts << "-V '#{vhost}'" unless vhost.nil?
+      opts << "-H '#{hostname}'" unless hostname.nil?
+      opts << "-P #{port}" unless port.nil?
 
-      if new_resource.ssl
+      if ssl
         opts << '-s'
-        opts << "--ssl-key-file '#{new_resource.ssl_key_file}'" if new_resource.ssl_key_file
-        opts << "--ssl-cert-file '#{new_resource.ssl_cert_file}'" if new_resource.ssl_cert_file
+        opts << "--ssl-key-file '#{ssl_key_file}'" if ssl_key_file
+        opts << "--ssl-cert-file '#{ssl_cert_file}'" if ssl_cert_file
       end
 
-      [ 'rabbitmqadmin', opts ].flatten.join(' ')
+      ['rabbitmqadmin', opts].flatten.join(' ')
     end
   end
 end

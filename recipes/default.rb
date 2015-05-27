@@ -1,10 +1,8 @@
 #
-# Cookbook Name:: rabbitmqadmin
-# Recipe:: default
+# Cookbook: rabbitmqadmin
+# License: Apache 2.0
 #
-# Copyright (C) 2015 Bloomberg Finance L.P.
-#
-# All rights reserved - Do Not Redistribute
+# Copyright 2015 Bloomberg Finance L.P.
 #
 include_recipe 'python::package'
 
