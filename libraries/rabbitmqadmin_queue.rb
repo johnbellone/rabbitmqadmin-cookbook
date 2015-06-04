@@ -53,6 +53,7 @@ class Chef::Resource::RabbitmqadminQueue < Chef::Resource
         sensitive true
         environment new_resource.run_environment
         not_if new_resource.queue_exists?, environment: new_resource.run_environment
+        guard_interpreter :default
       end
     end
   end
@@ -64,6 +65,7 @@ class Chef::Resource::RabbitmqadminQueue < Chef::Resource
         sensitive true
         environment new_resource.run_environment
         only_if new_resource.queue_exists?, environment: new_resource.run_environment
+        guard_interpreter :default
       end
     end
   end

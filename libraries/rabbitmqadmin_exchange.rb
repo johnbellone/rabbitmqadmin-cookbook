@@ -58,6 +58,7 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
         sensitive true
         environment new_resource.run_environment
         not_if new_resource.exchange_exists?, environment: new_resource.run_environment
+        guard_interpreter :default
       end
     end
   end
@@ -69,6 +70,7 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
         sensitive true
         environment new_resource.run_environment
         not_if new_resource.exchange_exists?, environment: new_resource.run_environment
+        guard_interpreter :default
       end
     end
   end
