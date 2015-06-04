@@ -12,17 +12,9 @@ class Chef::Resource::RabbitmqadminQueue < Chef::Resource
   actions(:create, :destroy)
   provides(:rabbitmqadmin_queue)
 
-  attribute(:queue_name,
-            kind_of: String,
-            name_attribute: true,
-            cannot_be: :empty)
-  attribute(:queue_options,
-            kind_of: Hash,
-            default: {})
-  attribute(:run_environment,
-            kind_of: Hash,
-            default: { 'PATH' => '/usr/local/bin:/usr/bin:/bin' })
-
+  attribute(:queue_name, kind_of: String, name_attribute: true)
+  attribute(:queue_options, kind_of: Hash, default: {})
+  attribute(:environment, kind_of: Hash, default: { 'PATH' => '/usr/local/bin:/usr/bin:/bin' })
   attribute(:vhost, kind_of: String)
   attribute(:username, kind_of: String, required: true)
   attribute(:password, kind_of: String, required: true)
@@ -51,8 +43,8 @@ class Chef::Resource::RabbitmqadminQueue < Chef::Resource
       execute "rabbitmqadmin declare queue #{new_resource.queue_name}" do
         command new_resource.command('declare queue')
         sensitive true
-        environment new_resource.run_environment
-        not_if new_resource.queue_exists?, environment: new_resource.run_environment
+        environment new_resource.environment
+        not_if new_resource.queue_exists?, environment: new_resource.environment
         guard_interpreter :default
       end
     end
@@ -63,8 +55,8 @@ class Chef::Resource::RabbitmqadminQueue < Chef::Resource
       execute "rabbitmqadmin delete queue #{new_resource.queue_name}" do
         command new_resource.command('delete queue')
         sensitive true
-        environment new_resource.run_environment
-        only_if new_resource.queue_exists?, environment: new_resource.run_environment
+        environment new_resource.environment
+        only_if new_resource.queue_exists?, environment: new_resource.environment
         guard_interpreter :default
       end
     end

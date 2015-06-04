@@ -12,22 +12,10 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
   actions(:create, :delete)
   provides(:rabbitmqadmin_exchange)
 
-  attribute(:exchange_name,
-            kind_of: String,
-            name_attribute: true,
-            cannot_be: :empty)
-  attribute(:exchange_type,
-            kind_of: String,
-            default: 'topic',
-            equal_to: %w(topic direct),
-            required: true)
-  attribute(:exchange_options,
-            kind_of: Hash,
-            default: {})
-  attribute(:run_environment,
-            kind_of: Hash,
-            default: { 'PATH' => '/usr/local/bin:/usr/bin:/bin' })
-
+  attribute(:exchange_name, kind_of: String, name_attribute: true)
+  attribute(:exchange_type, kind_of: String, default: 'topic', equal_to: %w(topic direct))
+  attribute(:exchange_options, kind_of: Hash, default: {})
+  attribute(:environment, kind_of: Hash, default: { 'PATH' => '/usr/local/bin:/usr/bin:/bin' })
   attribute(:vhost, kind_of: String)
   attribute(:username, kind_of: String, required: true)
   attribute(:password, kind_of: String, required: true)
@@ -56,8 +44,8 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
       execute "rabbitmqadmin declare exchange #{new_resource.exchange_name}" do
         command new_resource.command('declare exchange')
         sensitive true
-        environment new_resource.run_environment
-        not_if new_resource.exchange_exists?, environment: new_resource.run_environment
+        environment new_resource.environment
+        not_if new_resource.exchange_exists?, environment: new_resource.environment
         guard_interpreter :default
       end
     end
@@ -68,8 +56,8 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
       execute "rabbitmqadmin delete exchange #{new_resource.exchange_name}" do
         command new_resource.command('delete exchange')
         sensitive true
-        environment new_resource.run_environment
-        not_if new_resource.exchange_exists?, environment: new_resource.run_environment
+        environment new_resource.environment
+        not_if new_resource.exchange_exists?, environment: new_resource.environment
         guard_interpreter :default
       end
     end
