@@ -15,7 +15,7 @@ class Chef::Resource::RabbitmqadminExchange < Chef::Resource
   attribute(:exchange_name, kind_of: String, name_attribute: true)
   attribute(:exchange_type, kind_of: String, default: 'topic', equal_to: %w(topic direct))
   attribute(:exchange_options, kind_of: Hash, default: {})
-  attribute(:environment, kind_of: Hash, default: { 'PATH' => '/usr/local/bin:/usr/bin:/bin' })
+  attribute(:environment, kind_of: Hash, default: { 'PATH' => '/usr/local/bin:/usr/lib/rabbitmq:/usr/sbin:/sbin:/usr/bin:/bin' })
   attribute(:vhost, kind_of: String)
   attribute(:username, kind_of: String, required: true)
   attribute(:password, kind_of: String, required: true)
